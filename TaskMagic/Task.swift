@@ -33,15 +33,16 @@ class Task : NSObject {
         if let dateActivated = dateActivated {
             let timeActive = DateInterval(start: dateActivated, end: Date(timeIntervalSinceNow: 0))
             if let index = currentParent.activeChildTasks().index(of: self) {
+                // reverse order, first is highest
                 let order = currentParent.activeChildTasks().count - index
-                return timeActive.duration * Double(order)
+                return 1 - (1 / (1 + timeActive.duration * Double(order)))
             }
         } else if let dateDeactivated = dateDeactivated {
             let timeInactive = DateInterval(start: dateDeactivated, end: Date(timeIntervalSinceNow: 0))
             if let index = currentParent.inactiveChildTasks().index(of: self) {
-                // if later in inactive list, higher inactive priority, lower
+                // regular order, last is highest
                 let order = index
-                return timeInactive.duration * Double(order)
+                return 1 - (1 / (1 + timeInactive.duration * Double(order)))
             }
         }
         return 0.0
@@ -148,11 +149,15 @@ class Task : NSObject {
     }
     
     func swipe(_ active: Bool) {
+        // if already what it's supposed to be, don't change
         if active == self.active {
             return
         }
         self.active = active
         if !active {
+            // assign dateDeactivated, unassign dateActivated
+            dateDeactivated = Date()
+            dateActivated = nil
             if currentParent.active && currentParent != findRoot() {
                 var activeChild = false
                 for child in currentParent.allChildren() {
@@ -169,6 +174,9 @@ class Task : NSObject {
                 child.swipe(active)
             }
         } else {
+            // assign dateActivated, unassign dateDeactivated
+            dateActivated = Date()
+            dateDeactivated = nil
             if !currentParent.active {
                 currentParent.swipe(active)
             }
@@ -212,28 +220,23 @@ class Task : NSObject {
     }
     
     private func sortChildTasks() {
-        // check active tasks
-        for child in activeChildTasks() {
-            // if priority larger than first child
-            // move to front of list
-            // else leave alone
-            if child.priority >= activeChildTasks().first!.priority && child != activeChildTasks().first! {
-                children.remove(at: children.index(of: child)!)
-                children.insert(child, at: 0)
-            }
-            child.sortChildTasks()
+        // place all active children in new array
+        var activeChildren = activeChildTasks()
+        // place all inactive children in new array
+        var inactiveChildren = inactiveChildTasks()
+        // sort both arrays in place
+        activeChildren.sort {
+            return $0.priority > $1.priority
         }
-        // then check inactive tasks
-        for child in inactiveChildTasks() {
-            // if inactivepriority larger than last inactive
-            // move to back of list
-            // else leave alone
-            if child.priority >= inactiveChildTasks().last!.priority && child != inactiveChildTasks().last! {
-                children.remove(at: children.index(of: child)!)
-                children.append(child)
-            }
-            child.sortChildTasks()
+        inactiveChildren.sort {
+            return $0.priority < $1.priority
         }
+        // remove all children
+        children.removeAll()
+        // append active children to children
+        children.append(contentsOf: activeChildren)
+        // append inactive children to children
+        children.append(contentsOf: inactiveChildren)
     }
     
     func activeChildTasks() -> [Task] {

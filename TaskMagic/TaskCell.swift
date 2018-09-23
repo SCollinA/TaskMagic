@@ -21,9 +21,9 @@ class TaskCell : UITableViewCell {
     
     // set cell height to label height plus 10 above and 10 below = 20
     // must be computed to acquire dynamically
-    var taskCellViewHeight : CGFloat {
-        return taskNameLabel.frame.height >= subtasksNamesLabel.frame.height ? taskNameLabel.frame.height + 30 : subtasksNamesLabel.frame.height + 30
-    }
+//    var taskCellViewHeight : CGFloat {
+//        return taskNameLabel.frame.height >= subtasksNamesLabel.frame.height ? taskNameLabel.frame.height + 30 : subtasksNamesLabel.frame.height + 30
+//    }
     
     func configure(for task: Task) {
         self.task = task

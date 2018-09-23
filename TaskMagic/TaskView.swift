@@ -70,6 +70,8 @@ class TaskView : UITableViewController, UINavigationControllerDelegate, UISearch
         
         tableView.tableHeaderView = searchController.searchBar
         tableView.keyboardDismissMode = .interactive
+        tableView.estimatedRowHeight = 100
+        tableView.rowHeight = UITableView.automaticDimension
         
         let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         let tagButton = UIBarButtonItem(barButtonSystemItem: .organize, target: self, action: nil)
@@ -117,14 +119,14 @@ class TaskView : UITableViewController, UINavigationControllerDelegate, UISearch
         }
     }
     
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat { 
-        if let cell = tableView.cellForRow(at: indexPath) {
-            let taskCell = cell as! TaskCell
-            return taskCell.taskCellViewHeight
-        } else {
-            return 44
-        }
-    }
+//    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat { 
+//        if let cell = tableView.cellForRow(at: indexPath) {
+//            let taskCell = cell as! TaskCell
+//            return taskCell.taskCellViewHeight
+//        } else {
+//            return 44
+//        }
+//    }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let taskCell = tableView.dequeueReusableCell(withIdentifier: TaskCell.reuseIdentifier, for: indexPath) as! TaskCell

@@ -171,10 +171,12 @@ class TaskView : UIViewController, UINavigationControllerDelegate, UITableViewDe
         if isEditing {
             searchBar.placeholder = title
             searchBar.text = title
+            searchBar.showsCancelButton = true
         } else {
             searchBar.placeholder = "Add Task"
             searchBar.text = ""
             searchBar.showsCancelButton = false
+            searchBar.resignFirstResponder()
             
             parentTask.clearSelections()
         }
@@ -319,7 +321,6 @@ class TaskView : UIViewController, UINavigationControllerDelegate, UITableViewDe
         guard let searchText = searchBar.text else {
             return
         }
-        
         if isEditing {
             searchBar.text = ""
             searchBar.placeholder = title
@@ -332,19 +333,24 @@ class TaskView : UIViewController, UINavigationControllerDelegate, UITableViewDe
         tableView.reloadData()
     }
     
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        if searchBarShouldEndEditing(searchBar) {
+            searchBar.showsCancelButton = false
+            searchBar.text = ""
+            searchBar.resignFirstResponder()
+            tableView.reloadData()
+        } else {
+            searchBar.text = selectedTask.name
+        }
+    }
+    
     func searchBarShouldEndEditing(_ searchBar: UISearchBar) -> Bool {
-        if isSearching { // keeps cursor in search bar
+        // keep cursor in search bar when editing to keep task name
+        if isEditing {
             return false
         } else {
             return true
         }
-    }
-    
-    func didDismissSearchController(_ searchController: UISearchController) {
-        if isEditing {
-            setEdit()
-        }
-        tableView.reloadData()
     }
 }
 

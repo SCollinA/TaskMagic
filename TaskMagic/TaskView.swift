@@ -62,16 +62,11 @@ class TaskView : UIViewController, UINavigationControllerDelegate, UITableViewDe
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(setEdit))
         navigationController?.delegate = self
         
-//        searchController.delegate = self
-//        searchController.searchResultsUpdater = self
-//        searchController.hidesNavigationBarDuringPresentation = false
-//        searchController.dimsBackgroundDuringPresentation = false
         searchBar.delegate = self
         searchBar.returnKeyType = .done
         searchBar.placeholder = "Add Task"
         searchBar.autocorrectionType = .no
         
-        //tableView.tableHeaderView = searchController.searchBar
         tableView.delegate = self
         tableView.dataSource = self
         tableView.keyboardDismissMode = .interactive
@@ -161,9 +156,20 @@ class TaskView : UIViewController, UINavigationControllerDelegate, UITableViewDe
         }
     }
     
+    func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+        if parentTask.task(at: indexPath).active {
+            return true
+        } else {
+            return false
+        }
+    }
+    
     @objc func setEdit() {
         if !isSearching {
+            // toggle editing for whole page
             setEditing(!isEditing, animated: true)
+            // also need to update editing for tableview
+            tableView.setEditing(isEditing, animated: true)
             if isEditing {
                 searchBar.placeholder = title
                 searchBar.text = title
@@ -249,7 +255,6 @@ class TaskView : UIViewController, UINavigationControllerDelegate, UITableViewDe
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         parentTask.moveTask(at: sourceIndexPath, to: destinationIndexPath)
-        tableView.reloadData()
     }
     
     func changeName(to searchText: String) {

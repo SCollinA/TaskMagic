@@ -26,6 +26,8 @@ class Task : NSObject {
     var children = [Task]()
     var active = true
     var selected = false
+    
+    //var 
 
     //MARK: - Setup
     init(name: String = "") {

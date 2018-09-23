@@ -53,7 +53,7 @@ class Task : NSObject {
         if !active {
             swipe(true)
         }
-        saveTask()
+        sortTasks()
     }
     
     func removeTask(_ task: Task) {
@@ -63,13 +63,14 @@ class Task : NSObject {
         if let index = task.parents.index(of: self) {
             task.parents.remove(at: index)
         }
+        sortTasks()
     }
     
     func moveTask(at sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         let movingTask = task(at: sourceIndexPath)
         removeTask(movingTask)
         insertTask(movingTask, at: destinationIndexPath)
-        saveTask()
+        sortTasks()
     }
     
     private func insertTask(_ task: Task, at indexPath: IndexPath) {
@@ -96,21 +97,28 @@ class Task : NSObject {
     }
     
     func changeName(to newName: String) {
-        if currentParent == self { // if at root task
-            self.name = newName
-            saveTask()
-        } else if !currentParent.contains(taskNamed: newName) {
+//        if currentParent == self { // if at root task
+//            // change root task name and save
+//            self.name = newName
+//        } else
+        if !currentParent.contains(taskNamed: newName) {
+            // if current parent does not contain task with that name
+            // if there is another task with that name
+            // add that task here
             for task in allTasks() {
                 if task.name == newName {
+                    // make sure task is active
+                    task.swipe(true)
                     currentParent.insertTask(task, at: IndexPath(row: currentParent.children.index(of: self)!, section: 0))
                     currentParent.removeTask(self)
                     saveTask()
                     return
                 }
             }
+            // if no task already with that name
             self.name = newName
-            saveTask()
         }
+        saveTask()
     }
     
     func swipe(_ active: Bool) {
@@ -150,7 +158,7 @@ class Task : NSObject {
                 }
             }
         }
-        saveTask()
+        sortTasks()
     }
     
     //MARK: - Helper Methods
@@ -170,6 +178,29 @@ class Task : NSObject {
         return taskNames
     }
 
+    private func sortTasks() {
+        // find root task, sort children and children's children
+        let rootTask = findRoot()
+        rootTask.sortChildTasks()
+        saveTask()
+    }
+    
+    private func sortChildTasks() {
+        for child in children {
+            // if child is not active, move to bottom
+            if !child.active {
+                // do not call remove or insert
+                // because not changing parent
+                if let index = children.index(of: child) {
+                    children.remove(at: index)
+                }
+                // find bottom index
+                children.append(child)
+            }
+            child.sortChildTasks()
+        }
+    }
+    
     func activeChildTasks() -> [Task] {
         var activeTaskArray = [Task]()
         for task in children {

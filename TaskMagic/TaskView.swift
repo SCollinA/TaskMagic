@@ -177,7 +177,7 @@ class TaskView : UIViewController, UINavigationControllerDelegate, UITableViewDe
             searchBar.text = ""
             searchBar.showsCancelButton = false
             searchBar.resignFirstResponder()
-            
+            tableView.deselectRow(at: tableView.indexPathForSelectedRow!, animated: false)
             parentTask.clearSelections()
         }
         navigationController?.setToolbarHidden(!isEditing, animated: true)

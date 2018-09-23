@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="o27-hJ-lGD">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Root View Controller-->
+        <scene sceneID="JH1-za-6z3">
+            <objects>
+                <tableViewController storyboardIdentifier="Task View" id="uom-Ll-MlS" customClass="TaskView" customModule="TaskMagic" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelectionDuringEditing="YES" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="HPG-O0-52t">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="gray" showsReorderControl="YES" indentationWidth="10" shouldIndentWhileEditing="NO" reuseIdentifier="Task Cell" id="0ng-Co-rcM" customClass="TaskCell" customModule="TaskMagic" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="0ng-Co-rcM" id="gFU-mt-C9o">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lnh-gt-I8G">
+                                            <rect key="frame" x="2.5" y="10" width="370" height="24"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Subtasks Names" textAlignment="right" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QWd-yi-jTi">
+                                                    <rect key="frame" x="190" y="5" width="170" height="14.5"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Task Name" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PaY-Nu-9Ch">
+                                                    <rect key="frame" x="10" y="2" width="170" height="20.5"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="95" id="XpD-S7-w7x"/>
+                                                        <constraint firstAttribute="width" constant="170" id="tHV-Yw-Zv2"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <constraints>
+                                                <constraint firstItem="PaY-Nu-9Ch" firstAttribute="centerY" secondItem="lnh-gt-I8G" secondAttribute="centerY" id="A9t-CC-bpR"/>
+                                                <constraint firstItem="QWd-yi-jTi" firstAttribute="width" secondItem="PaY-Nu-9Ch" secondAttribute="width" id="H31-7m-jnW"/>
+                                                <constraint firstItem="PaY-Nu-9Ch" firstAttribute="leading" secondItem="lnh-gt-I8G" secondAttribute="leading" constant="10" id="Wqd-0C-uNm"/>
+                                                <constraint firstItem="QWd-yi-jTi" firstAttribute="leading" secondItem="PaY-Nu-9Ch" secondAttribute="trailing" constant="10" id="diw-DJ-Ajh"/>
+                                                <constraint firstAttribute="trailing" secondItem="QWd-yi-jTi" secondAttribute="trailing" constant="10" id="hHh-Ka-aIP"/>
+                                                <constraint firstItem="QWd-yi-jTi" firstAttribute="centerY" secondItem="lnh-gt-I8G" secondAttribute="centerY" id="x3l-Dh-Q9p"/>
+                                            </constraints>
+                                        </view>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="bottomMargin" secondItem="lnh-gt-I8G" secondAttribute="bottom" constant="-1" id="0aL-sG-sum"/>
+                                        <constraint firstItem="lnh-gt-I8G" firstAttribute="centerY" secondItem="gFU-mt-C9o" secondAttribute="centerY" id="4oj-yp-rnt"/>
+                                        <constraint firstItem="lnh-gt-I8G" firstAttribute="centerX" secondItem="gFU-mt-C9o" secondAttribute="centerX" id="RPC-zW-DyI"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <color key="tintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <connections>
+                                    <outlet property="subtasksNamesLabel" destination="QWd-yi-jTi" id="yW8-t3-HrG"/>
+                                    <outlet property="taskCellView" destination="lnh-gt-I8G" id="U1a-t5-CJM"/>
+                                    <outlet property="taskNameLabel" destination="PaY-Nu-9Ch" id="crL-Du-T9W"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="uom-Ll-MlS" id="HXu-0l-1Qp"/>
+                            <outlet property="delegate" destination="uom-Ll-MlS" id="ZDP-F9-70L"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Root View Controller" id="XCN-zH-g1f"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="lWv-Iv-iTr" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="484" y="79.610194902548727"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="1TA-xD-Idc">
+            <objects>
+                <navigationController id="o27-hJ-lGD" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="lkM-Ba-pKz">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="nYf-nh-Pw2">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </toolbar>
+                    <connections>
+                        <segue destination="uom-Ll-MlS" kind="relationship" relationship="rootViewController" id="TlF-Z3-QSf"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="f0I-MS-luk" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-468" y="80"/>
+        </scene>
+    </scenes>
+</document>

@@ -158,17 +158,6 @@ class Task : NSObject {
         return children[indexPath.row]
     }
     
-    func selectedChildren() -> [Task] {
-        var childArray = [Task]()
-        for child in children {
-            childArray.append(child)
-            if child.selected {
-                childArray.append(contentsOf: child.selectedChildren())
-            }
-        }
-        return childArray
-    }
-    
     func description(of tasks: [Task]) -> String {
         var taskNames = ""
         for task in tasks {
@@ -214,10 +203,6 @@ class Task : NSObject {
         }
         return false
     }
-
-    func allTasks() -> [Task] {
-        return findRoot().allChildren()
-    }
     
     private func allChildren() -> [Task] {
         var allChildrenArray = [Task]()
@@ -242,6 +227,10 @@ class Task : NSObject {
         } else {
             return parents[0].findRoot()
         }
+    }
+    
+    func allTasks() -> [Task] {
+        return findRoot().allChildren()
     }
 }
 

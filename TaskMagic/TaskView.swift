@@ -29,22 +29,17 @@ class TaskView : UIViewController, UINavigationControllerDelegate, UITableViewDe
     }()
     
     private var childTasks : [Task] {
-        var taskArray = [Task]()
-        for child in parentTask.children {
-            taskArray.append(child)
-            if child.selected {
-                taskArray.append(contentsOf: child.selectedChildren())
-            }
-        }
         return parentTask.children
     }
     
     private var selectedTask : Task {
+        // if a child is selected, return the child
         for child in parentTask.children {
             if child.selected {
                 return child
             }
         }
+        // else return the parent
         return parentTask
     }
     
@@ -151,7 +146,7 @@ class TaskView : UIViewController, UINavigationControllerDelegate, UITableViewDe
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        if parentTask.task(at: indexPath).active {
+        if !isSearching && parentTask.task(at: indexPath).active {
             return isEditing
         } else {
             return !isEditing
@@ -167,22 +162,24 @@ class TaskView : UIViewController, UINavigationControllerDelegate, UITableViewDe
     }
     
     @objc func setEdit() {
-        setEditing(!isEditing, animated: true)
-        if isEditing {
-            searchBar.placeholder = title
-            searchBar.text = title
-            searchBar.showsCancelButton = true
-        } else {
-            searchBar.placeholder = "Add Task"
-            searchBar.text = ""
-            searchBar.showsCancelButton = false
-            searchBar.resignFirstResponder()
-            if let selectedIndexPath = tableView.indexPathForSelectedRow {
-                tableView.deselectRow(at: selectedIndexPath, animated: false)
+        if !isSearching {
+            setEditing(!isEditing, animated: true)
+            if isEditing {
+                searchBar.placeholder = title
+                searchBar.text = title
+                searchBar.showsCancelButton = true
+            } else {
+                searchBar.placeholder = "Add Task"
+                searchBar.text = ""
+                searchBar.showsCancelButton = false
+                searchBar.resignFirstResponder()
+                if let selectedIndexPath = tableView.indexPathForSelectedRow {
+                    tableView.deselectRow(at: selectedIndexPath, animated: false)
+                }
+                parentTask.clearSelections()
             }
-            parentTask.clearSelections()
+            navigationController?.setToolbarHidden(!isEditing, animated: true)
         }
-        navigationController?.setToolbarHidden(!isEditing, animated: true)
     }
     
     //MARK: - Actions
@@ -324,9 +321,13 @@ class TaskView : UIViewController, UINavigationControllerDelegate, UITableViewDe
             return
         }
         if isEditing {
-            searchBar.text = ""
-            searchBar.placeholder = title
-            setEdit()
+            changeName(to: searchText)
+            // if updating parent task name, update title too
+            if selectedTask == parentTask {
+                title = parentTask.name
+            }
+            searchBar.text = selectedTask.name
+            searchBar.placeholder = selectedTask.name
         } else { // searching, add task
             if !selectTask(at: nil, withName: searchText) {
                 searchBar.text = ""

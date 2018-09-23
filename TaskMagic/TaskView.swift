@@ -9,10 +9,14 @@
 import Foundation
 import UIKit
 
-class TaskView : UITableViewController, UINavigationControllerDelegate, UISearchControllerDelegate, UISearchBarDelegate, UISearchResultsUpdating {
+class TaskView : UIViewController, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate{
     static let identifier = "Task View"
     //MARK: - Variables
-    var searchController = UISearchController(searchResultsController: nil)
+    //var searchController = UISearchController(searchResultsController: nil)
+    
+    @IBOutlet weak var searchBar: UISearchBar!
+    
+    @IBOutlet weak var tableView: UITableView!
     
     private var parentTask : Task = {
         let task : Task
@@ -48,6 +52,10 @@ class TaskView : UITableViewController, UINavigationControllerDelegate, UISearch
         return parentTask.allTasks()
     }
 
+    private var isSearching : Bool {
+        return searchBar.text != "" && !isEditing
+    }
+    
     private var searchResults = [Task]()
         
     //MARK: - Load View
@@ -59,16 +67,18 @@ class TaskView : UITableViewController, UINavigationControllerDelegate, UISearch
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(setEdit))
         navigationController?.delegate = self
         
-        searchController.delegate = self
-        searchController.searchResultsUpdater = self
-        searchController.hidesNavigationBarDuringPresentation = false
-        searchController.dimsBackgroundDuringPresentation = false
-        searchController.searchBar.delegate = self
-        searchController.searchBar.returnKeyType = .done
-        searchController.searchBar.placeholder = "Add Task"
-        searchController.searchBar.autocorrectionType = .no
+//        searchController.delegate = self
+//        searchController.searchResultsUpdater = self
+//        searchController.hidesNavigationBarDuringPresentation = false
+//        searchController.dimsBackgroundDuringPresentation = false
+        searchBar.delegate = self
+        searchBar.returnKeyType = .done
+        searchBar.placeholder = "Add Task"
+        searchBar.autocorrectionType = .no
         
-        tableView.tableHeaderView = searchController.searchBar
+        //tableView.tableHeaderView = searchController.searchBar
+        tableView.delegate = self
+        tableView.dataSource = self
         tableView.keyboardDismissMode = .interactive
         tableView.estimatedRowHeight = 100
         tableView.rowHeight = UITableView.automaticDimension
@@ -89,15 +99,15 @@ class TaskView : UITableViewController, UINavigationControllerDelegate, UISearch
     }
 
     override func viewWillDisappear(_ animated: Bool) {
-        searchController.isActive = false
-        searchController.searchBar.resignFirstResponder()
-        searchController.searchBar.showsCancelButton = false
+        searchBar.resignFirstResponder()
+        searchBar.showsCancelButton = false
     }
 
     func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
         let taskView = viewController as! TaskView
         if taskView != self {
             navigationController.delegate = taskView
+            taskView.goBack()
         }
         taskView.tableView.reloadData()
         navigationController.navigationBar.barTintColor = tableView.backgroundColor
@@ -111,19 +121,19 @@ class TaskView : UITableViewController, UINavigationControllerDelegate, UISearch
     }
     
     //MARK: - Table View Setup
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if searchController.isActive {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if searchBar.text != "" && !isEditing {
             return searchResults.count
         } else {
             return childTasks.count
         }
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let taskCell = tableView.dequeueReusableCell(withIdentifier: TaskCell.reuseIdentifier, for: indexPath) as! TaskCell
         let task : Task
         
-        if searchController.isActive {
+        if searchBar.text != "" && !isEditing {
             task = searchResults[indexPath.row]
         } else {
             task = childTasks[indexPath.row]
@@ -137,24 +147,18 @@ class TaskView : UITableViewController, UINavigationControllerDelegate, UISearch
         taskCell.configure(for: task)
         taskCell.tableView = tableView
         
-        let _ = self.tableView(tableView, heightForRowAt: indexPath)
-        
         return taskCell
     }
     
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        if searchController.isActive {
-            return false
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        if parentTask.task(at: indexPath).active {
+            return isEditing
         } else {
-            if parentTask.task(at: indexPath).active {
-                return isEditing
-            } else {
-                return !isEditing
-            }
+            return !isEditing
         }
     }
     
-    override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         if isEditing {
             return .none
         } else {
@@ -165,25 +169,24 @@ class TaskView : UITableViewController, UINavigationControllerDelegate, UISearch
     @objc func setEdit() {
         setEditing(!isEditing, animated: true)
         if isEditing {
-            searchController.searchBar.placeholder = title
-            searchController.searchBar.text = title
+            searchBar.placeholder = title
+            searchBar.text = title
         } else {
-            searchController.searchBar.placeholder = "Add Task"
-            searchController.searchBar.text = ""
-            searchController.dismiss(animated: true) {
-                self.searchController.searchBar.showsCancelButton = false
-            }
+            searchBar.placeholder = "Add Task"
+            searchBar.text = ""
+            searchBar.showsCancelButton = false
+            
             parentTask.clearSelections()
         }
         navigationController?.setToolbarHidden(!isEditing, animated: true)
     }
     
     //MARK: - Actions
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if isEditing {
             let didDeselect = selectTask(at: indexPath)  // just select task
-            searchController.searchBar.placeholder = selectedTaskName()
-            searchController.searchBar.text = selectedTaskName()
+            searchBar.placeholder = selectedTaskName()
+            searchBar.text = selectedTaskName()
             if didDeselect {
                 tableView.deselectRow(at: indexPath, animated: false)
             }
@@ -192,10 +195,10 @@ class TaskView : UITableViewController, UINavigationControllerDelegate, UISearch
         if selectTask(at: indexPath) { // if selected task is current child
             let newTaskView = storyboard!.instantiateViewController(withIdentifier: TaskView.identifier) as! TaskView
             newTaskView.parentTask = selectedTask
-            searchController.searchBar.text = ""
+            searchBar.text = ""
             navigationController?.pushViewController(newTaskView, animated: true)
         } else {
-            searchController.searchBar.text = ""
+            searchBar.text = ""
             tableView.reloadData()
         }
     }
@@ -205,7 +208,7 @@ class TaskView : UITableViewController, UINavigationControllerDelegate, UISearch
             parentTask.addTask(Task(name: name))
             return false
         }
-        if searchController.isActive {  // if searching, add task or push new task view for selected task
+        if isSearching {  // if searching, add task or push new task view for selected task
             if !parentTask.contains(task: searchResults[indexPath.row]) {
                 parentTask.addTask(searchResults[indexPath.row])
                 return false
@@ -229,13 +232,13 @@ class TaskView : UITableViewController, UINavigationControllerDelegate, UISearch
     }
     
     // Remove task
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         parentTask.removeTask(childTasks[indexPath.row])
         tableView.reloadData()
     }
     
     // Moving Tasks
-    override func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
+    func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
         if parentTask.task(at: proposedDestinationIndexPath).active {
             return proposedDestinationIndexPath
         } else {
@@ -243,7 +246,7 @@ class TaskView : UITableViewController, UINavigationControllerDelegate, UISearch
         }
     }
     
-    override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         parentTask.moveTask(at: sourceIndexPath, to: destinationIndexPath)
         tableView.reloadData()
     }
@@ -275,47 +278,14 @@ class TaskView : UITableViewController, UINavigationControllerDelegate, UISearch
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if !isEditing {
-            searchController.searchResultsUpdater?.updateSearchResults(for: searchController)
+            updateSearchResults()
             tableView.reloadData()
         }
     }
     
-    // Add task
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        guard let searchText = searchBar.text else {
-            return
-        }
-        
-        if isEditing {
-            searchBar.text = ""
-            searchBar.placeholder = title
-            searchController.dismiss(animated: true, completion: nil)
-            setEdit()
-        } else { // searching, add task
-            if !selectTask(at: nil, withName: searchText) {
-                searchController.searchBar.text = ""
-            }
-        }
-        tableView.reloadData()
-    }
-    
-    func searchBarShouldEndEditing(_ searchBar: UISearchBar) -> Bool {
-        if searchController.isActive { // keeps cursor in search bar
-            return false
-        } else {
-            return true
-        }
-    }
-    
-    func didDismissSearchController(_ searchController: UISearchController) {
-        if isEditing {
-            setEdit()
-        }
-        tableView.reloadData()
-    }
-    func updateSearchResults(for searchController: UISearchController) {
-        if searchController.isActive && searchController.searchBar.text != "" {
-            guard let searchText = searchController.searchBar.text else {
+    func updateSearchResults() {
+        if isSearching {
+            guard let searchText = searchBar.text else {
                 return
             }
             searchResults = allTasks
@@ -342,6 +312,39 @@ class TaskView : UITableViewController, UINavigationControllerDelegate, UISearch
                 return true
             }
         }
+    }
+    
+    // Add task
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        guard let searchText = searchBar.text else {
+            return
+        }
+        
+        if isEditing {
+            searchBar.text = ""
+            searchBar.placeholder = title
+            setEdit()
+        } else { // searching, add task
+            if !selectTask(at: nil, withName: searchText) {
+                searchBar.text = ""
+            }
+        }
+        tableView.reloadData()
+    }
+    
+    func searchBarShouldEndEditing(_ searchBar: UISearchBar) -> Bool {
+        if isSearching { // keeps cursor in search bar
+            return false
+        } else {
+            return true
+        }
+    }
+    
+    func didDismissSearchController(_ searchController: UISearchController) {
+        if isEditing {
+            setEdit()
+        }
+        tableView.reloadData()
     }
 }
 

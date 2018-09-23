@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import UIKit
 import os.log
 
 class Task : NSObject {
@@ -27,7 +26,26 @@ class Task : NSObject {
     var active = true
     var selected = false
     
-    //var 
+    var dateActivated : Date? = Date() // if just initialized, active
+    var dateDeactivated : Date?
+    
+    var priority : Double {
+        if let dateActivated = dateActivated {
+            let timeActive = DateInterval(start: dateActivated, end: Date(timeIntervalSinceNow: 0))
+            if let index = currentParent.activeChildTasks().index(of: self) {
+                let order = currentParent.activeChildTasks().count - index
+                return timeActive.duration * Double(order)
+            }
+        } else if let dateDeactivated = dateDeactivated {
+            let timeInactive = DateInterval(start: dateDeactivated, end: Date(timeIntervalSinceNow: 0))
+            if let index = currentParent.inactiveChildTasks().index(of: self) {
+                // if later in inactive list, higher inactive priority, lower
+                let order = index
+                return timeInactive.duration * Double(order)
+            }
+        }
+        return 0.0
+    }
 
     //MARK: - Setup
     init(name: String = "") {
@@ -44,6 +62,12 @@ class Task : NSObject {
         }
         if let children = aDecoder.decodeObject(forKey: Task.propertyKeys.children) as? [Task] {
             self.children = children
+        }
+        if let dateActivated = aDecoder.decodeObject(forKey: Task.propertyKeys.dateActivated) as? Date {
+            self.dateActivated = dateActivated
+        }
+        if let dateDeactivated = aDecoder.decodeObject(forKey: Task.propertyKeys.dateDeactivated) as? Date {
+            self.dateDeactivated = dateDeactivated
         }
         self.active = aDecoder.decodeBool(forKey: Task.propertyKeys.active)
     }
@@ -188,15 +212,24 @@ class Task : NSObject {
     }
     
     private func sortChildTasks() {
-        for child in children {
-            // if child is not active, move to bottom
-            if !child.active {
-                // do not call remove or insert
-                // because not changing parent
-                if let index = children.index(of: child) {
-                    children.remove(at: index)
-                }
-                // find bottom index
+        // check active tasks
+        for child in activeChildTasks() {
+            // if priority larger than first child
+            // move to front of list
+            // else leave alone
+            if child.priority >= activeChildTasks().first!.priority && child != activeChildTasks().first! {
+                children.remove(at: children.index(of: child)!)
+                children.insert(child, at: 0)
+            }
+            child.sortChildTasks()
+        }
+        // then check inactive tasks
+        for child in inactiveChildTasks() {
+            // if inactivepriority larger than last inactive
+            // move to back of list
+            // else leave alone
+            if child.priority >= inactiveChildTasks().last!.priority && child != inactiveChildTasks().last! {
+                children.remove(at: children.index(of: child)!)
                 children.append(child)
             }
             child.sortChildTasks()
@@ -211,6 +244,16 @@ class Task : NSObject {
             }
         }
         return activeTaskArray
+    }
+
+    func inactiveChildTasks() -> [Task] {
+        var inactiveTaskArray = [Task]()
+        for task in children {
+            if !task.active {
+                inactiveTaskArray.append(task)
+            }
+        }
+        return inactiveTaskArray
     }
     
     func contains(task: Task) -> Bool {
@@ -278,6 +321,8 @@ extension Task : NSCoding {
         static let parents = "parents"
         static let children = "children"
         static let active = "active"
+        static let dateActivated = "dateActivated"
+        static let dateDeactivated = "dateDeactivated"
     }
     
     func encode(with aCoder: NSCoder) {
@@ -285,6 +330,8 @@ extension Task : NSCoding {
         aCoder.encode(parents, forKey: Task.propertyKeys.parents)
         aCoder.encode(children, forKey: Task.propertyKeys.children)
         aCoder.encode(active, forKey: Task.propertyKeys.active)
+        aCoder.encode(dateActivated, forKey: Task.propertyKeys.dateActivated)
+        aCoder.encode(dateDeactivated, forKey: Task.propertyKeys.dateDeactivated)
     }
     
     private func saveTask() {

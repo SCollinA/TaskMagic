@@ -27,16 +27,16 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lnh-gt-I8G">
-                                            <rect key="frame" x="10" y="10" width="355" height="52"/>
+                                            <rect key="frame" x="10" y="5" width="355" height="62"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Subtasks Names" textAlignment="right" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QWd-yi-jTi">
-                                                    <rect key="frame" x="182.5" y="10" width="162.5" height="32"/>
+                                                    <rect key="frame" x="182.5" y="10" width="162.5" height="42"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Task Name" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PaY-Nu-9Ch">
-                                                    <rect key="frame" x="10" y="10" width="162.5" height="32"/>
+                                                    <rect key="frame" x="10" y="10" width="162.5" height="42"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -58,8 +58,8 @@
                                     <constraints>
                                         <constraint firstAttribute="trailing" secondItem="lnh-gt-I8G" secondAttribute="trailing" constant="10" id="CVd-LM-gYr"/>
                                         <constraint firstItem="lnh-gt-I8G" firstAttribute="leading" secondItem="gFU-mt-C9o" secondAttribute="leading" constant="10" id="Njh-5L-nIb"/>
-                                        <constraint firstAttribute="bottom" secondItem="lnh-gt-I8G" secondAttribute="bottom" constant="10" id="dyg-M1-f5V"/>
-                                        <constraint firstItem="lnh-gt-I8G" firstAttribute="top" secondItem="gFU-mt-C9o" secondAttribute="top" constant="10" id="jtA-BD-Fca"/>
+                                        <constraint firstAttribute="bottom" secondItem="lnh-gt-I8G" secondAttribute="bottom" constant="5" id="dyg-M1-f5V"/>
+                                        <constraint firstItem="lnh-gt-I8G" firstAttribute="top" secondItem="gFU-mt-C9o" secondAttribute="top" constant="5" id="jtA-BD-Fca"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <color key="tintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

@@ -156,6 +156,10 @@ class TaskView : UIViewController, UINavigationControllerDelegate, UITableViewDe
         }
     }
     
+    func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
+        return false
+    }
+    
     func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         if parentTask.task(at: indexPath).active {
             return true

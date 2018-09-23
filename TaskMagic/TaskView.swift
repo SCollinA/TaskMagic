@@ -117,7 +117,7 @@ class TaskView : UITableViewController, UINavigationControllerDelegate, UISearch
         }
     }
     
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat { 
         if let cell = tableView.cellForRow(at: indexPath) {
             let taskCell = cell as! TaskCell
             return taskCell.taskCellViewHeight

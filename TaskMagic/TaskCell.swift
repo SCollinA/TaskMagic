@@ -30,18 +30,20 @@ class TaskCell : UITableViewCell {
         
         // Set task names and child tasks names
         taskNameLabel.text = task.name
-        subtasksNamesLabel.text = task.description(of: task.activeChildTasks())
-        subtasksNamesLabel.textColor = UIColor.blue
         // Round Edges
         taskCellView.layer.cornerRadius = 20
         
         // set cell color
         if task.active {
-            accessoryType = .none
+            subtasksNamesLabel.text = task.description(of: task.activeChildTasks())
+            subtasksNamesLabel.textColor = UIColor.blue
+            subtasksNamesLabel.font = subtasksNamesLabel.font.withSize(12)
             taskNameLabel.font = taskNameLabel.font.withSize(32)
             taskCellView.backgroundColor = UIColor.green
         } else {
-            accessoryType = .checkmark
+            subtasksNamesLabel.text = "✓"
+            subtasksNamesLabel.textColor = UIColor.black
+            subtasksNamesLabel.font = subtasksNamesLabel.font.withSize(16)
             taskNameLabel.font = taskNameLabel.font.withSize(16)
             taskCellView.backgroundColor = UIColor.lightGray
         }

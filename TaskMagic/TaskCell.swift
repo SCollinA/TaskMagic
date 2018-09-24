@@ -33,7 +33,6 @@ class TaskCell : UITableViewCell {
             subtasksNamesLabel.textColor = UIColor.blue
             subtasksNamesLabel.font = subtasksNamesLabel.font.withSize(12)
             // set active font size to 60 max
-            print(task.priority)
             taskNameLabel.font = taskNameLabel.font.withSize(CGFloat(32 * task.priority))
             taskCellView.backgroundColor = UIColor.green
         } else {

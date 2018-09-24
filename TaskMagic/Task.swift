@@ -33,8 +33,8 @@ class Task : NSObject {
         if let dateActivated = dateActivated {
             let timeActive = DateInterval(start: dateActivated, end: Date()).duration
             if let index = currentParent.activeChildTasks().index(of: self) {
-                // reverse order, first is highest
-                let order = (currentParent.activeChildTasks().count - index)
+                // reverse order, first is highest, percent
+                let order = Double((currentParent.activeChildTasks().count - index)) / Double(currentParent.activeChildTasks().count)
                 // find max time active for currentparent children
                 var maxTimeActive = timeActive
                 for child in currentParent.activeChildTasks() {
@@ -44,13 +44,16 @@ class Task : NSObject {
                     }
                 }
                 let timeFactor = timeActive / maxTimeActive
-                return 1 - (1 / (1 + timeFactor * Double(order)))
+                return timeFactor * order
             }
         } else if let dateDeactivated = dateDeactivated {
             let timeInactive = DateInterval(start: dateDeactivated, end: Date()).duration
             if let index = currentParent.inactiveChildTasks().index(of: self) {
                 // regular order, last is highest, percent
-                let order = index
+                print(index)
+                print(currentParent.inactiveChildTasks().count)
+                let order = Double(index) / Double(currentParent.inactiveChildTasks().count)
+                print(order)
                 // find max time inactive for currentparent children
                 var maxTimeInactive = timeInactive
                 for child in currentParent.inactiveChildTasks() {
@@ -60,7 +63,7 @@ class Task : NSObject {
                     }
                 }
                 let timeFactor = timeInactive / maxTimeInactive
-                return 1 - (1 / (1 + timeFactor * Double(order)))
+                return timeFactor * order
             }
         }
         return 0.0

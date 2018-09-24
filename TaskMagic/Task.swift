@@ -26,7 +26,7 @@ class Task : NSObject {
     var active = true
     var selected = false
     
-    var dateActivated : Date? = Date() // if just initialized, active
+    var dateActivated : Date?
     var dateDeactivated : Date?
     
     var priority : Double {
@@ -50,10 +50,7 @@ class Task : NSObject {
             let timeInactive = DateInterval(start: dateDeactivated, end: Date()).duration
             if let index = currentParent.inactiveChildTasks().index(of: self) {
                 // regular order, last is highest, percent
-                print(index)
-                print(currentParent.inactiveChildTasks().count)
                 let order = Double(index) / Double(currentParent.inactiveChildTasks().count)
-                print(order)
                 // find max time inactive for currentparent children
                 var maxTimeInactive = timeInactive
                 for child in currentParent.inactiveChildTasks() {
@@ -72,6 +69,7 @@ class Task : NSObject {
     //MARK: - Setup
     init(name: String = "") {
         self.name = name
+        dateActivated = Date()
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
@@ -85,10 +83,10 @@ class Task : NSObject {
         if let children = aDecoder.decodeObject(forKey: Task.propertyKeys.children) as? [Task] {
             self.children = children
         }
-        if let dateActivated = aDecoder.decodeObject(forKey: Task.propertyKeys.dateActivated) as? Date {
+        if let dateActivated = aDecoder.decodeObject(forKey: Task.propertyKeys.dateActivated) as? Date? {
             self.dateActivated = dateActivated
         }
-        if let dateDeactivated = aDecoder.decodeObject(forKey: Task.propertyKeys.dateDeactivated) as? Date {
+        if let dateDeactivated = aDecoder.decodeObject(forKey: Task.propertyKeys.dateDeactivated) as? Date? {
             self.dateDeactivated = dateDeactivated
         }
         self.active = aDecoder.decodeBool(forKey: Task.propertyKeys.active)

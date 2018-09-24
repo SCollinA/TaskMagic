@@ -13,6 +13,15 @@ class TaskCell : UITableViewCell {
     static let reuseIdentifier = "Task Cell"
     
     private var task = Task()
+    
+    private var activeTaskColor : UIColor {
+        return UIColor(hue: CGFloat(task.priority), saturation: CGFloat(task.priority / 2), brightness: 1, alpha: CGFloat(task.priority))
+    }
+    
+    private var inactiveTaskColor : UIColor {
+        return UIColor(white: CGFloat(task.priority), alpha: CGFloat(task.priority))
+    }
+    
     var tableView = UITableView()
     
     @IBOutlet weak var taskNameLabel: UILabel!
@@ -33,14 +42,15 @@ class TaskCell : UITableViewCell {
             subtasksNamesLabel.textColor = UIColor.blue
             subtasksNamesLabel.font = subtasksNamesLabel.font.withSize(12)
             // set active font size to 60 max
-            taskNameLabel.font = taskNameLabel.font.withSize(CGFloat(32 * task.priority))
-            taskCellView.backgroundColor = UIColor.green
+            let fontSize = (16.0 * task.priority) + 16.0
+            taskNameLabel.font = taskNameLabel.font.withSize(CGFloat(fontSize))
+            taskCellView.backgroundColor = activeTaskColor
         } else {
             subtasksNamesLabel.text = "✓"
             subtasksNamesLabel.textColor = UIColor.black
             subtasksNamesLabel.font = subtasksNamesLabel.font.withSize(16)
             taskNameLabel.font = taskNameLabel.font.withSize(16)
-            taskCellView.backgroundColor = UIColor.lightGray
+            taskCellView.backgroundColor = inactiveTaskColor
         }
     }
     

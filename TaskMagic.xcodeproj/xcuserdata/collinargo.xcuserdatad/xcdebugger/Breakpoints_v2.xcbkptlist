@@ -10,13 +10,45 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TaskMagic/Task.swift"
-            timestampString = "559442181.779308"
+            timestampString = "559445239.456383"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "51"
-            endingLineNumber = "51"
+            startingLineNumber = "49"
+            endingLineNumber = "49"
             landmarkName = "priority"
             landmarkType = "24">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "TaskMagic.Task.priority.getter : Swift.Double"
+                  moduleName = "TaskMagic"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/collinargo/Documents/Coding/Loco%20Motion%20Enterprises/TaskMagic/TaskMagic/Task.swift"
+                  timestampString = "559445205.063113"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "49"
+                  endingLineNumber = "49"
+                  offsetFromSymbolStart = "1944">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "TaskMagic.Task.priority.getter : Swift.Double"
+                  moduleName = "TaskMagic"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/collinargo/Documents/Coding/Loco%20Motion%20Enterprises/TaskMagic/TaskMagic/Task.swift"
+                  timestampString = "559445205.066056"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "49"
+                  endingLineNumber = "49"
+                  offsetFromSymbolStart = "1969">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

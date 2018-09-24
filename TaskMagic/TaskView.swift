@@ -259,6 +259,7 @@ class TaskView : UIViewController, UINavigationControllerDelegate, UITableViewDe
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         parentTask.moveTask(at: sourceIndexPath, to: destinationIndexPath)
+        tableView.reloadData()
     }
     
     func changeName(to searchText: String) {

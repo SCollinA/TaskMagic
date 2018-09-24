@@ -116,7 +116,7 @@ class Task : NSObject {
         let movingTask = task(at: sourceIndexPath)
         removeTask(movingTask)
         insertTask(movingTask, at: destinationIndexPath)
-        sortTasks()
+        saveTask()
     }
     
     private func insertTask(_ task: Task, at indexPath: IndexPath) {

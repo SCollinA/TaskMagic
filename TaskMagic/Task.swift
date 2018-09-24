@@ -31,18 +31,36 @@ class Task : NSObject {
     
     var priority : Double {
         if let dateActivated = dateActivated {
-            let timeActive = DateInterval(start: dateActivated, end: Date(timeIntervalSinceNow: 0))
+            let timeActive = DateInterval(start: dateActivated, end: Date()).duration
             if let index = currentParent.activeChildTasks().index(of: self) {
                 // reverse order, first is highest
-                let order = currentParent.activeChildTasks().count - index
-                return 1 - (1 / (1 + timeActive.duration * Double(order)))
+                let order = (currentParent.activeChildTasks().count - index)
+                // find max time active for currentparent children
+                var maxTimeActive = timeActive
+                for child in currentParent.activeChildTasks() {
+                    let childTimeActive = DateInterval(start: child.dateActivated!, end: Date()).duration
+                    if childTimeActive > timeActive {
+                        maxTimeActive = childTimeActive
+                    }
+                }
+                let timeFactor = timeActive / maxTimeActive
+                return 1 - (1 / (1 + timeFactor * Double(order)))
             }
         } else if let dateDeactivated = dateDeactivated {
-            let timeInactive = DateInterval(start: dateDeactivated, end: Date(timeIntervalSinceNow: 0))
+            let timeInactive = DateInterval(start: dateDeactivated, end: Date()).duration
             if let index = currentParent.inactiveChildTasks().index(of: self) {
-                // regular order, last is highest
+                // regular order, last is highest, percent
                 let order = index
-                return 1 - (1 / (1 + timeInactive.duration * Double(order)))
+                // find max time inactive for currentparent children
+                var maxTimeInactive = timeInactive
+                for child in currentParent.inactiveChildTasks() {
+                    let childTimeInactive = DateInterval(start: child.dateDeactivated!, end: Date()).duration
+                    if childTimeInactive > timeInactive {
+                        maxTimeInactive = childTimeInactive
+                    }
+                }
+                let timeFactor = timeInactive / maxTimeInactive
+                return 1 - (1 / (1 + timeFactor * Double(order)))
             }
         }
         return 0.0

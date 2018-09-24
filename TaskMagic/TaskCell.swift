@@ -19,12 +19,6 @@ class TaskCell : UITableViewCell {
     @IBOutlet weak var subtasksNamesLabel: UILabel!
     @IBOutlet weak var taskCellView: UIView!
     
-    // set cell height to label height plus 10 above and 10 below = 20
-    // must be computed to acquire dynamically
-//    var taskCellViewHeight : CGFloat {
-//        return taskNameLabel.frame.height >= subtasksNamesLabel.frame.height ? taskNameLabel.frame.height + 30 : subtasksNamesLabel.frame.height + 30
-//    }
-    
     func configure(for task: Task) {
         self.task = task
         
@@ -38,7 +32,9 @@ class TaskCell : UITableViewCell {
             subtasksNamesLabel.text = task.description(of: task.activeChildTasks())
             subtasksNamesLabel.textColor = UIColor.blue
             subtasksNamesLabel.font = subtasksNamesLabel.font.withSize(12)
-            taskNameLabel.font = taskNameLabel.font.withSize(32)
+            // set active font size to 60 max
+            print(task.priority)
+            taskNameLabel.font = taskNameLabel.font.withSize(CGFloat(32 * task.priority))
             taskCellView.backgroundColor = UIColor.green
         } else {
             subtasksNamesLabel.text = "✓"

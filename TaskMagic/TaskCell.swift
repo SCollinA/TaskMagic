@@ -35,7 +35,7 @@ class TaskCell : UITableViewCell {
     
     @IBOutlet weak var taskNameLabel: UILabel!
     @IBOutlet weak var subtasksNamesLabel: UILabel!
-    @IBOutlet weak var taskCellView: UIView!
+    @IBOutlet weak var taskCellView: TaskCellView!
     
     func configure(for task: Task) {
         self.task = task
@@ -53,13 +53,13 @@ class TaskCell : UITableViewCell {
             // set active font size to 60 max
             let fontSize = (16.0 * task.priority) + 16.0
             taskNameLabel.font = taskNameLabel.font.withSize(CGFloat(fontSize))
-            taskCellView.backgroundColor = activeTaskColor
+            taskCellView.color = activeTaskColor
         } else {
             subtasksNamesLabel.text = "✓"
             subtasksNamesLabel.textColor = UIColor.black
             subtasksNamesLabel.font = subtasksNamesLabel.font.withSize(16)
             taskNameLabel.font = taskNameLabel.font.withSize(16)
-            taskCellView.backgroundColor = inactiveTaskColor
+            taskCellView.color = inactiveTaskColor
         }
         
         // tableView.backgroundColor = avgTaskColor
@@ -72,5 +72,25 @@ class TaskCell : UITableViewCell {
             task.swipe(false)
         }
         tableView.reloadData()
+    }
+}
+
+class TaskCellView: UIView {
+    // prevent cell from becoming transparent during reordering
+    var color: UIColor = .clear {
+        didSet {
+            backgroundColor = color
+        }
+    }
+    
+    override var backgroundColor: UIColor? {
+        set {
+            guard newValue == color else { return }
+            super.backgroundColor = newValue
+        }
+        
+        get {
+            return super.backgroundColor
+        }
     }
 }

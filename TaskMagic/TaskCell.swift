@@ -19,7 +19,7 @@ class TaskCell : UITableViewCell {
     }
     
     private var inactiveTaskColor : UIColor {
-        return UIColor(white: CGFloat(1 - task.priority), alpha: 1) //CGFloat(task.priority))
+        return UIColor(white: CGFloat(1 - task.priority / 2), alpha: 1) //CGFloat(task.priority))
     }
     
     private var avgTaskColor : UIColor {
@@ -50,8 +50,8 @@ class TaskCell : UITableViewCell {
             subtasksNamesLabel.text = task.description(of: task.activeChildTasks())
             subtasksNamesLabel.textColor = UIColor.blue
             subtasksNamesLabel.font = subtasksNamesLabel.font.withSize(12)
-            // set active font size to 60 max
-            let fontSize = (16.0 * task.priority) + 16.0
+            // set active font size to 24 max
+            let fontSize =  (8.0 * task.priority) + 16.0
             taskNameLabel.font = taskNameLabel.font.withSize(CGFloat(fontSize))
             taskCellView.color = activeTaskColor
         } else {

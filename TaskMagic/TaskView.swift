@@ -286,6 +286,7 @@ class TaskView : UIViewController, UINavigationControllerDelegate, UITableViewDe
 //        } else {
 //            searchBar.showsCancelButton = false
 //        }
+        searchBar.showsCancelButton = true
         return true
     }
     

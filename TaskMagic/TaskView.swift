@@ -73,9 +73,9 @@ class TaskView : UIViewController, UINavigationControllerDelegate, UITableViewDe
         tableView.estimatedRowHeight = 100
         tableView.rowHeight = UITableView.automaticDimension
         
-        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let tagButton = UIBarButtonItem(barButtonSystemItem: .organize, target: self, action: nil)
-        setToolbarItems([flexibleSpace, tagButton], animated: false)
+//        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+//        let tagButton = UIBarButtonItem(barButtonSystemItem: .organize, target: self, action: nil)
+//        setToolbarItems([flexibleSpace, tagButton], animated: false)
         
         definesPresentationContext = true
     }
@@ -188,7 +188,7 @@ class TaskView : UIViewController, UINavigationControllerDelegate, UITableViewDe
                 }
                 parentTask.clearSelections()
             }
-            navigationController?.setToolbarHidden(!isEditing, animated: true)
+//            navigationController?.setToolbarHidden(!isEditing, animated: true)
         }
     }
     

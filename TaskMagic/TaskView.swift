@@ -101,7 +101,6 @@ class TaskView : UIViewController, UINavigationControllerDelegate, UITableViewDe
             taskView.goBack()
         }
         taskView.tableView.reloadData()
-        // navigationController.navigationBar.barTintColor = tableView.backgroundColor
     }
     
     func goBack() {
@@ -176,7 +175,7 @@ class TaskView : UIViewController, UINavigationControllerDelegate, UITableViewDe
             if isEditing {
                 searchBar.placeholder = title
                 searchBar.text = title
-                //searchBar.showsCancelButton = true
+                searchBar.showsCancelButton = false
             } else {
                 searchBar.placeholder = "Add Task"
                 searchBar.text = ""

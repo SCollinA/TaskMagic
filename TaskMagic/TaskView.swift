@@ -175,11 +175,11 @@ class TaskView : UIViewController, UINavigationControllerDelegate, UITableViewDe
             if isEditing {
                 searchBar.placeholder = title
                 searchBar.text = title
-                searchBar.showsCancelButton = false
+                searchBar.showsCancelButton = true
             } else {
                 searchBar.placeholder = "Add Task"
                 searchBar.text = ""
-                //searchBar.showsCancelButton = false
+                searchBar.showsCancelButton = false
                 searchBar.resignFirstResponder()
                 if let selectedIndexPath = tableView.indexPathForSelectedRow {
                     tableView.deselectRow(at: selectedIndexPath, animated: false)
@@ -281,11 +281,11 @@ class TaskView : UIViewController, UINavigationControllerDelegate, UITableViewDe
     
     //MARK: - Searching
     func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
-        if !isEditing {
-            searchBar.showsCancelButton = true
-        } else {
-            searchBar.showsCancelButton = false
-        }
+//        if !isEditing {
+//            searchBar.showsCancelButton = true
+//        } else {
+//            searchBar.showsCancelButton = false
+//        }
         return true
     }
     

@@ -38,6 +38,9 @@ class Task : NSObject {
                 // find max time active for currentparent children
                 var maxTimeActive = timeActive
                 for child in currentParent.activeChildTasks() {
+                    if child.dateActivated == nil {
+                        child.dateActivated = Date()
+                    }
                     let childTimeActive = DateInterval(start: child.dateActivated!, end: Date()).duration
                     if childTimeActive > timeActive {
                         maxTimeActive = childTimeActive
@@ -54,6 +57,9 @@ class Task : NSObject {
                 // find max time inactive for currentparent children
                 var maxTimeInactive = timeInactive
                 for child in currentParent.inactiveChildTasks() {
+                    if child.dateDeactivated == nil {
+                        child.dateDeactivated = Date()
+                    }
                     let childTimeInactive = DateInterval(start: child.dateDeactivated!, end: Date()).duration
                     if childTimeInactive > timeInactive {
                         maxTimeInactive = childTimeInactive
@@ -177,7 +183,9 @@ class Task : NSObject {
             // assign dateDeactivated, unassign dateActivated
             dateDeactivated = Date()
             dateActivated = nil
+            // if the current parent is active and is the root task
             if currentParent.active && currentParent != findRoot() {
+                // check if current parent has active children
                 var activeChild = false
                 for child in currentParent.allChildren() {
                     if child.active {
@@ -185,6 +193,8 @@ class Task : NSObject {
                         break
                     }
                 }
+                // if current parent does not have active children,
+                // swipe all children inactive
                 if !activeChild {
                     currentParent.swipe(active)
                 }
@@ -239,6 +249,10 @@ class Task : NSObject {
     }
     
     private func sortChildTasks() {
+        // sort all children of children
+        for child in children {
+            child.sortChildTasks()
+        }
         // place all active children in new array
         var activeChildren = activeChildTasks()
         // place all inactive children in new array

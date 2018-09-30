@@ -105,8 +105,6 @@ class TaskView : UIViewController, UINavigationControllerDelegate, UITableViewDe
     
     func goBack() {
         parentTask.clearSelections()
-        parentTask = parentTask.currentParent
-        parentTask.clearSelections()
         isEditing = false
     }
     

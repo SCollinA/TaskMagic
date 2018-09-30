@@ -72,6 +72,7 @@ class TaskView : UIViewController, UINavigationControllerDelegate, UITableViewDe
         tableView.keyboardDismissMode = .interactive
         tableView.estimatedRowHeight = 100
         tableView.rowHeight = UITableView.automaticDimension
+        tableView.backgroundColor = UIColor.black
         
 //        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
 //        let tagButton = UIBarButtonItem(barButtonSystemItem: .organize, target: self, action: nil)
@@ -100,7 +101,7 @@ class TaskView : UIViewController, UINavigationControllerDelegate, UITableViewDe
             taskView.goBack()
         }
         taskView.tableView.reloadData()
-        navigationController.navigationBar.barTintColor = tableView.backgroundColor
+        // navigationController.navigationBar.barTintColor = tableView.backgroundColor
     }
     
     func goBack() {

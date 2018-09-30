@@ -15,11 +15,11 @@ class TaskCell : UITableViewCell {
     private var task = Task()
     
     private var activeTaskColor : UIColor {
-        return UIColor(hue: CGFloat(task.priority), saturation: CGFloat(task.priority / 2), brightness: 1, alpha: CGFloat(task.priority))
+        return UIColor(hue: CGFloat(task.priority), saturation: CGFloat(task.priority / 2), brightness: 1, alpha: 1) // CGFloat(task.priority))
     }
     
     private var inactiveTaskColor : UIColor {
-        return UIColor(white: CGFloat(task.priority), alpha: CGFloat(task.priority))
+        return UIColor(white: CGFloat(1 - task.priority), alpha: 1) //CGFloat(task.priority))
     }
     
     private var avgTaskColor : UIColor {
@@ -62,7 +62,7 @@ class TaskCell : UITableViewCell {
             taskCellView.backgroundColor = inactiveTaskColor
         }
         
-        tableView.backgroundColor = avgTaskColor
+        // tableView.backgroundColor = avgTaskColor
     }
     
     func swipe(with swipeGestureRecognizer: UISwipeGestureRecognizer) {

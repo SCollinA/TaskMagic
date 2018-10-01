@@ -167,7 +167,8 @@ class TaskView : UIViewController, UINavigationControllerDelegate, UITableViewDe
     }
     
     @objc func setEdit() {
-        if !isSearching {
+        // if not currently searching term or is already editing
+        if !isSearching || isEditing {
             // toggle editing for whole page
             setEditing(!isEditing, animated: true)
             // also need to update editing for tableview
@@ -185,6 +186,7 @@ class TaskView : UIViewController, UINavigationControllerDelegate, UITableViewDe
                     tableView.deselectRow(at: selectedIndexPath, animated: false)
                 }
                 parentTask.clearSelections()
+                tableView.reloadData()
             }
 //            navigationController?.setToolbarHidden(!isEditing, animated: true)
         }
@@ -198,6 +200,17 @@ class TaskView : UIViewController, UINavigationControllerDelegate, UITableViewDe
             searchBar.text = selectedTaskName()
             if didDeselect {
                 tableView.deselectRow(at: indexPath, animated: false)
+                // reset color when same task selected
+                tableView.reloadData()
+            } else {
+                // set task bubble to neon green when selected
+                if let taskCellSubviews = tableView.cellForRow(at: indexPath)?.contentView.subviews {
+                    for subview in taskCellSubviews {
+                        if let taskBubble = subview as? TaskCellView {
+                            taskBubble.color = UIColor(hue: 0.5, saturation: 1, brightness: 1, alpha: 1)
+                        }
+                    }
+                }
             }
             return
         }
@@ -210,6 +223,12 @@ class TaskView : UIViewController, UINavigationControllerDelegate, UITableViewDe
             searchBar.text = ""
             tableView.reloadData()
         }
+    }
+    
+    // reset color when other task selected
+    func tableView(_ tableView: UITableView, willDeselectRowAt indexPath: IndexPath) -> IndexPath? {
+        tableView.reloadData()
+        return indexPath
     }
     
     func selectTask(at indexPath: IndexPath?, withName name: String = "" ) -> Bool {

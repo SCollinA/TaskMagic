@@ -22,15 +22,6 @@ class TaskCell : UITableViewCell {
         return UIColor(white: CGFloat(1 - task.priority / 2), alpha: 1) //CGFloat(task.priority))
     }
     
-    private var avgTaskColor : UIColor {
-        var avgPriority = 0.0
-        for child in task.currentParent.activeChildTasks() {
-            avgPriority += child.priority
-        }
-        avgPriority /= Double(task.currentParent.activeChildTasks().count)
-        return UIColor(hue: CGFloat(avgPriority), saturation: CGFloat(avgPriority / 4), brightness: 1, alpha: CGFloat(avgPriority))
-    }
-    
     var tableView = UITableView()
     
     @IBOutlet weak var taskNameLabel: UILabel!
@@ -61,8 +52,6 @@ class TaskCell : UITableViewCell {
             taskNameLabel.font = taskNameLabel.font.withSize(16)
             taskCellView.color = inactiveTaskColor
         }
-        
-        // tableView.backgroundColor = avgTaskColor
     }
     
     func swipe(with swipeGestureRecognizer: UISwipeGestureRecognizer) {

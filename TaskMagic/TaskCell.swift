@@ -38,19 +38,28 @@ class TaskCell : UITableViewCell {
         
         // set cell color
         if task.active {
-            subtasksNamesLabel.text = task.description(of: task.activeChildTasks())
+            subtasksNamesLabel.text = task.description(of: task.activeChildTasks)
             subtasksNamesLabel.textColor = UIColor.blue
             subtasksNamesLabel.font = subtasksNamesLabel.font.withSize(12)
             // set active font size to 24 max
             let fontSize =  (8.0 * task.priority) + 16.0
             taskNameLabel.font = taskNameLabel.font.withSize(CGFloat(fontSize))
             taskCellView.color = activeTaskColor
+            taskNameLabel.sizeToFit()
+            subtasksNamesLabel.sizeToFit()
+//            taskCellView.frame = CGRect(x: 0, y: 0, width: taskCellView.frame.width * CGFloat(task.priority), height: taskCellView.frame.height)
+            print(CGFloat(task.priority) * taskCellView.frame.width)
+            
         } else {
             subtasksNamesLabel.text = "✓"
             subtasksNamesLabel.textColor = UIColor.black
             subtasksNamesLabel.font = subtasksNamesLabel.font.withSize(16)
             taskNameLabel.font = taskNameLabel.font.withSize(16)
             taskCellView.color = inactiveTaskColor
+            taskNameLabel.sizeToFit()
+            subtasksNamesLabel.sizeToFit()
+//            taskCellView.frame = CGRect(x: 0, y: 0, width: taskCellView.frame.width * 0.5, height: taskCellView.frame.height)
+            print(tableView.frame.width * 0.5)
         }
     }
     

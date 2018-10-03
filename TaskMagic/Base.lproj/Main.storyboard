@@ -56,16 +56,19 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GYQ-Ec-fxi" customClass="TaskCellView" customModule="TaskMagic" customModuleProvider="target">
-                                                    <rect key="frame" x="10" y="5" width="355" height="62"/>
+                                                    <rect key="frame" x="83" y="5" width="209" height="62"/>
                                                     <subviews>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Subtasks Names" textAlignment="right" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FqG-3C-NvP">
-                                                            <rect key="frame" x="182.5" y="10" width="162.5" height="42"/>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Subtasks Names" textAlignment="right" lineBreakMode="clip" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="4" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FqG-3C-NvP">
+                                                            <rect key="frame" x="104.5" y="10" width="94.5" height="42"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" relation="lessThanOrEqual" constant="180" id="4Or-9Y-TSO"/>
+                                                            </constraints>
                                                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Task Name" lineBreakMode="clip" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="8" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fv6-15-U3R">
-                                                            <rect key="frame" x="10" y="10" width="162.5" height="42"/>
+                                                            <rect key="frame" x="10" y="10" width="84.5" height="42"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
@@ -73,7 +76,7 @@
                                                     </subviews>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
-                                                        <constraint firstItem="FqG-3C-NvP" firstAttribute="width" secondItem="fv6-15-U3R" secondAttribute="width" id="Dpt-C5-QUX"/>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="200" id="GuC-PE-uRK"/>
                                                         <constraint firstItem="FqG-3C-NvP" firstAttribute="top" secondItem="GYQ-Ec-fxi" secondAttribute="top" constant="10" id="Lde-yV-F4e"/>
                                                         <constraint firstItem="fv6-15-U3R" firstAttribute="top" secondItem="GYQ-Ec-fxi" secondAttribute="top" constant="10" id="Nc7-4Z-W5E"/>
                                                         <constraint firstAttribute="bottom" secondItem="fv6-15-U3R" secondAttribute="bottom" constant="10" id="U8a-qY-xol"/>
@@ -86,9 +89,10 @@
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="GYQ-Ec-fxi" firstAttribute="top" secondItem="mk8-hy-BXJ" secondAttribute="top" constant="5" id="VLh-Rl-189"/>
-                                                <constraint firstAttribute="trailing" secondItem="GYQ-Ec-fxi" secondAttribute="trailing" constant="10" id="g4l-RC-zaJ"/>
+                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="GYQ-Ec-fxi" secondAttribute="trailing" constant="10" id="g4l-RC-zaJ"/>
                                                 <constraint firstAttribute="bottom" secondItem="GYQ-Ec-fxi" secondAttribute="bottom" constant="5" id="mTZ-j0-pdF"/>
-                                                <constraint firstItem="GYQ-Ec-fxi" firstAttribute="leading" secondItem="mk8-hy-BXJ" secondAttribute="leading" constant="10" id="s5Z-h4-Pd7"/>
+                                                <constraint firstItem="GYQ-Ec-fxi" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="mk8-hy-BXJ" secondAttribute="leading" constant="10" id="s5Z-h4-Pd7"/>
+                                                <constraint firstItem="GYQ-Ec-fxi" firstAttribute="centerX" secondItem="mk8-hy-BXJ" secondAttribute="centerX" id="sjI-cS-Drs"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

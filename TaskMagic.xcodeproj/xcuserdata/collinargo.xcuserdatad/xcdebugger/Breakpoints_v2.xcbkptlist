@@ -9,13 +9,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "TaskMagic/TaskView.swift"
-            timestampString = "560047095.5646729"
+            filePath = "TaskMagic/TaskCell.swift"
+            timestampString = "560236739.849074"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "196"
-            endingLineNumber = "196"
-            landmarkName = "tableView(_:didSelectRowAt:)"
+            startingLineNumber = "51"
+            endingLineNumber = "51"
+            landmarkName = "configure(for:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

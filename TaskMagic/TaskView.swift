@@ -361,8 +361,11 @@ class TaskView : UIViewController, UINavigationControllerDelegate, UITableViewDe
             searchBar.text = selectedTask.name
             searchBar.placeholder = selectedTask.name
         } else { // searching, add task
-            if !selectTask(at: nil, withName: searchText) {
-                searchBar.text = ""
+            // check to make sure task has name
+            if searchText != "" {
+                if !selectTask(at: nil, withName: searchText) {
+                    searchBar.text = ""
+                }
             }
         }
         tableView.reloadData()

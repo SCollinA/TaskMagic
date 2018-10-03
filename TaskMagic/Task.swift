@@ -32,44 +32,66 @@ class Task : NSObject {
     var priority : Double {
         if let dateActivated = dateActivated {
             let timeActive = DateInterval(start: dateActivated, end: Date()).duration
-            if let index = currentParent.activeChildTasks().index(of: self) {
+            if let index = currentParent.activeChildTasks.index(of: self) {
                 // reverse order, first is highest, percent
-                let order = Double((currentParent.activeChildTasks().count - index)) / Double(currentParent.activeChildTasks().count)
-                // find max time active for currentparent children
-                var maxTimeActive = timeActive
-                for child in currentParent.activeChildTasks() {
+                let orderPercent = Double((currentParent.activeChildTasks.count - index)) / Double(currentParent.activeChildTasks.count)
+                // find max time active for this task's siblings
+                var maxTimeActive = DateInterval(start: Date(), duration: 0).duration
+                for child in currentParent.activeChildTasks {
+                    // in case task somehow doesn't have dateActivated
                     if child.dateActivated == nil {
                         child.dateActivated = Date()
                     }
                     let childTimeActive = DateInterval(start: child.dateActivated!, end: Date()).duration
-                    if childTimeActive > timeActive {
+                    if childTimeActive > maxTimeActive {
                         maxTimeActive = childTimeActive
                     }
                 }
+                // average this task's time value
                 let timeFactor = timeActive / maxTimeActive
-                return timeFactor * order
+                return timeFactor * pow(orderPercent, 5)
             }
         } else if let dateDeactivated = dateDeactivated {
             let timeInactive = DateInterval(start: dateDeactivated, end: Date()).duration
-            if let index = currentParent.inactiveChildTasks().index(of: self) {
+            if let index = currentParent.inactiveChildTasks.index(of: self) {
                 // regular order, last is highest, percent
-                let order = Double(index) / Double(currentParent.inactiveChildTasks().count)
+                let orderPercent = Double(index) / Double(currentParent.inactiveChildTasks.count)
                 // find max time inactive for currentparent children
-                var maxTimeInactive = timeInactive
-                for child in currentParent.inactiveChildTasks() {
+                var maxTimeInactive = DateInterval(start: Date(), duration: 0).duration
+                for child in currentParent.inactiveChildTasks {
                     if child.dateDeactivated == nil {
                         child.dateDeactivated = Date()
                     }
                     let childTimeInactive = DateInterval(start: child.dateDeactivated!, end: Date()).duration
-                    if childTimeInactive > timeInactive {
+                    if childTimeInactive > maxTimeInactive {
                         maxTimeInactive = childTimeInactive
                     }
                 }
                 let timeFactor = timeInactive / maxTimeInactive
-                return timeFactor * order
+                return timeFactor * pow(orderPercent, 5)
             }
         }
         return 0.0
+    }
+    
+    var activeChildTasks : [Task] {
+        var activeTaskArray = [Task]()
+        for task in children {
+            if task.active {
+                activeTaskArray.append(task)
+            }
+        }
+        return activeTaskArray
+    }
+    
+    var inactiveChildTasks : [Task] {
+        var inactiveTaskArray = [Task]()
+        for task in children {
+            if !task.active {
+                inactiveTaskArray.append(task)
+            }
+        }
+        return inactiveTaskArray
     }
 
     //MARK: - Setup
@@ -96,6 +118,7 @@ class Task : NSObject {
             self.dateDeactivated = dateDeactivated
         }
         self.active = aDecoder.decodeBool(forKey: Task.propertyKeys.active)
+        sortTasks()
     }
     
     //MARK: - Actions
@@ -254,9 +277,9 @@ class Task : NSObject {
             child.sortChildTasks()
         }
         // place all active children in new array
-        var activeChildren = activeChildTasks()
+        var activeChildren = activeChildTasks
         // place all inactive children in new array
-        var inactiveChildren = inactiveChildTasks()
+        var inactiveChildren = inactiveChildTasks
         // sort both arrays in place
         activeChildren.sort {
             return $0.priority > $1.priority
@@ -270,26 +293,6 @@ class Task : NSObject {
         children.append(contentsOf: activeChildren)
         // append inactive children to children
         children.append(contentsOf: inactiveChildren)
-    }
-    
-    func activeChildTasks() -> [Task] {
-        var activeTaskArray = [Task]()
-        for task in children {
-            if task.active {
-                activeTaskArray.append(task)
-            }
-        }
-        return activeTaskArray
-    }
-
-    func inactiveChildTasks() -> [Task] {
-        var inactiveTaskArray = [Task]()
-        for task in children {
-            if !task.active {
-                inactiveTaskArray.append(task)
-            }
-        }
-        return inactiveTaskArray
     }
     
     func contains(task: Task) -> Bool {

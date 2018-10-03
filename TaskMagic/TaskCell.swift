@@ -47,9 +47,7 @@ class TaskCell : UITableViewCell {
             taskCellView.color = activeTaskColor
             taskNameLabel.sizeToFit()
             subtasksNamesLabel.sizeToFit()
-//            taskCellView.frame = CGRect(x: 0, y: 0, width: taskCellView.frame.width * CGFloat(task.priority), height: taskCellView.frame.height)
-            print(CGFloat(task.priority) * taskCellView.frame.width)
-            
+            taskCellView.sizeToFit()
         } else {
             subtasksNamesLabel.text = "✓"
             subtasksNamesLabel.textColor = UIColor.black
@@ -58,8 +56,7 @@ class TaskCell : UITableViewCell {
             taskCellView.color = inactiveTaskColor
             taskNameLabel.sizeToFit()
             subtasksNamesLabel.sizeToFit()
-//            taskCellView.frame = CGRect(x: 0, y: 0, width: taskCellView.frame.width * 0.5, height: taskCellView.frame.height)
-            print(tableView.frame.width * 0.5)
+            taskCellView.sizeToFit()
         }
     }
     
